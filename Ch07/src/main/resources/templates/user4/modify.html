@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>index</title>
+	</head>
+	<body>
+		<h3>User4 수정</h3>
+		<a th:href="@{/}">처음으로</a>
+		<a th:href="@{/user4/list}">User4 목록</a>
+		<form th:action="@{/user4/modify}" method="post">
+			<table border="1">
+			<tr>
+				<td>번호</td>
+				<td><input type="text" name="seq" th:value="${user.seq}" readonly="readonly"></td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td><input type="text" name="name" th:value="${user.name}"></td>
+			</tr>
+			<tr>
+				<td>성별</td>
+				<td>
+					<label><input type="radio" name="gender" value="1" th:checked="${user.gender eq '1'}">남</label>
+					<label><input type="radio" name="gender" value="2" th:checked="${user.gender eq '2'}">여</label>
+				</td>
+			</tr>
+			<tr>
+				<td>나이</td>
+				<td><input type="number" name="age" th:value="${user.age}"></td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td><input type="text" name="addr" th:value="${user.addr}"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right">
+					<input type="submit" value="수정"/>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.ch07.dao.User5DAO">
+	<insert id="insertUser5">
+		INSERT INTO `user5` VALUES (#{uid}, #{name}, #{birth}, #{age}, #{address}, #{hp});
+	</insert>
+	<select id="selectUser5" resultType="kr.co.ch07.vo.User5VO">
+		SELECT * FROM `user5` WHERE `uid` = #{uid};
+	</select>
+	<select id="selectUser5s" resultType="kr.co.ch07.vo.User5VO">
+		SELECT * FROM `user5`;
+	</select>
+	<update id="updateUser5">
+		UPDATE `user5` SET `name`=#{name}, `birth`=#{birth}, `age`=#{age}, `address`=#{address}, `hp`=#{hp} WHERE `uid`=#{uid};
+	</update>
+	<delete id="deleteUser5">
+		DELETE FROM `user5` WHERE `uid`=#{uid};
+	</delete>
+</mapper>
