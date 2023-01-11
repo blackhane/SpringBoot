@@ -2,6 +2,7 @@ package kr.co.ch07.controller;
 
 import java.util.List;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import kr.co.ch07.service.User1Service;
 import kr.co.ch07.vo.User1VO;
 
+@MapperScan("kr.co.ch07.dao")
 @Controller
 public class User1Controller {
 
