@@ -13,7 +13,7 @@ public class User2Controller {
 	
 	@GetMapping("/user2/loginSuccess")
 	public String Success() {
-		return "/user2/Success";
+		return "/user2/loginSuccess";
 	}
 	
 }
