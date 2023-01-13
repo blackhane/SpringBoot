@@ -5,7 +5,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import kr.co.ch08.service.User2Service;
@@ -30,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//로그아웃 설정
 		http.logout().invalidateHttpSession(true).logoutRequestMatcher(new AntPathRequestMatcher("/user2/logout")).logoutSuccessUrl("/user2/login");
 		
+		http.rememberMe().key("remember_me").rememberMeParameter("remember_me").tokenValiditySeconds(3600);
+		
 	}
 	
 	@Autowired
@@ -42,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.inMemoryAuthentication().withUser("manager").password("{noop}1234").roles("MANAGER");
 		auth.inMemoryAuthentication().withUser("member").password("{noop}1234").roles("MEMBER");
 		
-		auth.userDetailsService(userService).passwordEncoder(new MessageDigestPasswordEncoder("SHA-256"));
+		auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
 }
