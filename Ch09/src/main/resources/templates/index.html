@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>index</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+		<script th:src="@{/js/user1.js}"></script>
+		<script>
+			$(function(){
+				$('.member_list1').click(function(){
+					$.ajax({
+						url : '/Ch09/member',
+						method : 'get',
+						dataType : 'json',
+						success : function(data){
+							console.log(data);
+						}
+					});
+				});	
+				
+				$('.member_list2').click(function(){
+					$.ajax({
+						url : '/Ch09/member/a20',
+						method : 'get',
+						dataType : 'json',
+						success : function(data){
+							console.log(data);
+						}
+					});
+				});	
+				
+				$('.member_register').click(function(){
+					let jsonData = {
+							'uid' : 'a20',
+							'name' : '길동',
+							'hp' : '000-1111-2222',
+							'pos' : '인턴',
+							'dep' : '102'
+					}
+					
+					$.ajax({
+						url : '/Ch09/member',
+						method : 'post',
+						data : jsonData,
+						dataType : 'json',
+						success : function(data){
+							console.log(data);
+						}
+					});
+				});	
+				
+				$('.member_modify').click(function(){
+					let jsonData = {
+							'uid' : 'a20',
+							'name' : '홍길동',
+							'hp' : '000-1111-2222',
+							'pos' : '사원',
+							'dep' : '103'
+					}
+					
+					$.ajax({
+						url : '/Ch09/member',
+						method : 'put',
+						data : jsonData,
+						dataType : 'json',
+						success : function(data){
+							console.log(data);
+						}
+					});
+				});	
+				
+				$('.member_delete').click(function(){
+					$.ajax({
+						url : '/Ch09/member/a20',
+						method : 'delete',
+						dataType : 'json',
+						success : function(data){
+							console.log(data);
+						}
+					});
+				});	
+			});
+		</script>
+	</head>
+	<body>
+		<h3>Ch09.Spring REST 서비스 실습</h3>
+		
+		<h4>user1</h4>
+		<button class="list1">user1 목록</button>
+		<button class="list2">user1 찾기</button>
+		<button class="register">user1 등록</button>
+		<button class="modify">user1 수정</button>
+		<button class="delete">user1 삭제</button>
+		
+		<h4>member</h4>
+		<button class="member_list1">member 목록</button>
+		<button class="member_list2">member찾기</button>
+		<button class="member_register">member 등록</button>
+		<button class="member_modify">member 수정</button>
+		<button class="member_delete">member 삭제</button>
+		
+	</body>
+</html>
