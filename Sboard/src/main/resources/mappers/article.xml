@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.sboard.dao.ArticleDAO">
+	<insert id="insertArticle" useGeneratedKeys="true" keyProperty="no">
+		INSERT INTO `board_article`
+		(`title`,`content`,`file`, `uid`,`regip`,`rdate`)
+		VALUE (#{title}, #{content}, #{file}, #{uid}, #{regip}, NOW());
+	</insert>
+	<select id="selectArticles" resultType="kr.co.sboard.vo.ArticleVO">
+		SELECT * FROM `board_article` ORDER BY `no` DESC LIMIT #{pg}, 10;
+	</select>
+	<select id="countArticles" resultType="int">
+		SELECT COUNT(*) FROM `board_article`;
+	</select>
+	
+	<insert id="insertFile">
+		INSERT INTO `board_file`
+		(`parent`, `newName`, `oriName`, `rdate`)
+		VALUE (#{parent}, #{newName}, #{oriName}, NOW());
+	</insert>
+</mapper>

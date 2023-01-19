@@ -263,12 +263,6 @@ $(function() {
 			$('input[name=nick]').focus();
 			return false;
 		}
-		//이메일 체크
-		if ($('input[name=email]' == "")) {
-			alert('이메일을 확인하세요.')
-			$('input[name=email]').focus();
-			return false;
-		}
 		if (!hpOk) {
 			alert('휴대폰을 확인하세요.')
 			$('input[name=hp]').focus();

@@ -1,7 +1,5 @@
 package kr.co.sboard.entity;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -29,7 +27,7 @@ public class UserEntity {
 	private String addr1;
 	private String addr2;
 	private String regip;
-	private LocalDateTime rdate;
+	private String rdate;
 	private String sessId;
 	private String sessLimitDate;
 	private String wdate;
