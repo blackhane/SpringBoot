@@ -15,12 +15,12 @@ public class SboardApplication {
 		SpringApplication.run(SboardApplication.class, args);
 	}
 
-	@GetMapping(value = {"/", "/index"})
+	@GetMapping(value = {"", "index"})
 	public String index(Principal principal) {
 		
 		//로그인 여부에 따라
 		if(principal != null) {
-			return "redirect:/list";
+			return "redirect:/list?pg=1";
 		}else {
 			return "redirect:/user/login";
 		}

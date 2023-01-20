@@ -22,6 +22,9 @@ public class ArticleVO {
 	private String regip;
 	private String rdate;
 	
+	private String nick;
+	private FileVO filevo;
+	
 	public String getRdate() {
 		return rdate.substring(2, 10);
 	}

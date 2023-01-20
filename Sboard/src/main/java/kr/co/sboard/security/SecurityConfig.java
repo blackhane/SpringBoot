@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//로그인 
 		http.formLogin()
 		.loginPage("/user/login")
-		.defaultSuccessUrl("/list")
+		.defaultSuccessUrl("/list?pg=1")
 		.failureUrl("/user/login?success=102")
 		.usernameParameter("uid")
 		.passwordParameter("pass");

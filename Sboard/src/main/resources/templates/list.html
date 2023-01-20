@@ -30,8 +30,8 @@
                 
                 <tr th:each="vo,voState:${articles}">
                     <td th:text="${num + voState.count}"></td>
-                    <td><a th:href="@{/view}">[[${vo.title}]] &#91;[[${vo.comment}]]&#93;</a></td>
-                    <td>[[${vo.uid}]]</td>
+                    <td><a th:href="@{/view(no=${vo.no}, pg=${pg})}">[[${vo.title}]] &#91;[[${vo.comment}]]&#93;</a></td>
+                    <td>[[${vo.nick}]]</td>
                     <td>[[${vo.rdate}]]</td>
                     <td>[[${vo.hit}]]</td>
                 </tr>               
@@ -39,14 +39,14 @@
             </table>
 
             <div class="page">
-            	<th:block th:if="${pageGroupStart > 1}">
-            		<a th:href="@{/list?pg=}+${pageGroupStart-1}" class="prev">이전</a>
+            	<th:block th:if="${groups[0] > 1}">
+            		<a th:href="@{/list(pg=${groups[0]-1})}" class="prev">이전</a>
             	</th:block>
-                <th:block th:each="cnt:${#numbers.sequence(pageGroupStart, pageGroupEnd)}">
-                	<a th:href="@{/list?pg=}+${cnt}" class="num" th:class="${cnt}==${pg} ? 'current' : 'off'" th:text=${cnt}></a>
+                <th:block th:each="cnt:${#numbers.sequence(groups[0], groups[1])}">
+                	<a th:href="@{/list(pg=${cnt})}" class="num" th:class="${cnt}==${pg} ? 'current' : 'off'" th:text=${cnt}></a>
                 </th:block>
-                <th:block th:if="${pageGroupEnd < count}">
-                	<a th:href="@{/list?pg=}+${pageGroupEnd+1}" class="next">다음</a>
+                <th:block th:if="${groups[1] < groups[2]}">
+                	<a th:href="@{/list(pg=${groups[1]+1})}" class="next">다음</a>
                 </th:block>
             </div>
 
