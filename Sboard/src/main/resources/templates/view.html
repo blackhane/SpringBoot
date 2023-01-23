@@ -8,14 +8,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script>
     	$(function(){
+    		list();
     		
     		function list(){
+    			let uid = $('input[name=replyUid]').val();
+    			let no = $('input[name=no]').val();
     			$.ajax({
-    				url : '/replyList/',
+    				url : 'replyList/'+no,
     				method : 'get',
     				dataType : 'json',
     				success : function(data){
-    					
+						$('.commentList > article').remove();
+    					if(data.length == 0){
+    							let tag = "<p class='empty'>등록된 댓글이 없습니다.</p>";
+    							$('.commentList').append(tag);
+    					}else{
+        					for(i in data){
+        						let tag = "<article>";
+	        						tag += "<span class='nick'>"+data[i].nick+"</span>&nbsp;";
+	        						tag += "<span class='date'>"+data[i].rdate+"</span>  ";
+	        						tag += "<p class='content'>"+data[i].content+"</p>";
+        						if(uid == data[i].uid){
+	        						tag += "<div>";
+	        						tag += "<a href='#' class='remove' data-no='"+data[i].no+"'>삭제</a>&nbsp;";
+	        						tag += "<a href='#' class='modify' data-no='"+data[i].no+"'>수정</a>";
+	        						tag += "</div>";
+        						}
+        						tag += "</article> ";
+        						$('.commentList').append(tag);
+        					}
+    					}
     				}
     			});
     		};
@@ -23,15 +45,41 @@
     		$('.btnComplete').click(function(){
     			let uid = $('input[name=replyUid]').val();
     			let nick = $('input[name=replyNick]').val();
-    			let no = $('input[name=no]').val();
-    			let content = $('textarea[name=content]').val();
+    			let parent = $('input[name=no]').val();
+    			let content = $('.comment').val();
     			let jsonData = {
     					'uid' : uid,
     					'nick' : nick,
-    					'no' : no,
+    					'parent' : parent,
     					'content' : content
     			}
     			console.log(jsonData);
+    			$.ajax({
+    				url : 'replyRegister',
+    				method : 'post',
+    				data : jsonData,
+    				dataType : 'json',
+    				success : function(data){
+    					list();
+    					alert("댓글이 등록되었습니다.");
+    					$('.comment').val('');
+    				}
+    			});
+    		});
+    		
+    		$(document).on('click','.remove', function(){
+    			let no = $(this).data('no');
+    			$.ajax({
+    				url : 'replyDelete/'+no,
+    				method : 'delete',
+    				dataType : 'json',
+    				success : function(data){
+    					if(data > 0){
+        					list();
+        					alert("댓글이 삭제되었습니다.");
+    					}
+    				}
+    			});
     		});
     	});
     </script>
@@ -72,17 +120,7 @@
 
             <!-- 댓글목록 -->
             <section class="commentList">
-                <h3>댓글목록</h3>
-                <article>
-                    <span class="nick">길동이</span>
-                    <span class="date">20-05-13</span>                    
-                    <p class="content">댓글 샘플입니다.</p>
-                    <div>
-                        <a href="#" class="remove">삭제</a>
-                        <a href="#" class="modify">수정</a>
-                    </div>
-                </article>                
-                <p class="empty">등록된 댓글이 없습니다.</p>
+            	<h3>댓글목록</h3>
             </section>
 
             <!-- 댓글쓰기 -->
@@ -91,7 +129,7 @@
                 <input type="hidden" name="replyUid" th:value="${#authentication.principal.user.uid}"/>
                 <input type="hidden" name="replyNick" th:value="${#authentication.principal.user.nick}"/>
                 <input type="hidden" name="no" th:value="${articleVO.no}"/>
-                   <textarea name="content" placeholder="댓글내용 입력"></textarea>
+                   <textarea name="content" class="comment" placeholder="댓글내용 입력"></textarea>
                    <div>
                        <a href="#" class="btn btnCancel">취소</a>
                        <input type="submit" class="btn btnComplete" value="작성완료"/>

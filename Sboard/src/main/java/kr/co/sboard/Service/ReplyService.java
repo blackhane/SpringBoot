@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import kr.co.sboard.Repository.ArticleRepository;
 import kr.co.sboard.entity.ArticleEntity;
-import kr.co.sboard.vo.ArticleVO;
 
 @Service
 public class ReplyService {
@@ -20,12 +19,14 @@ public class ReplyService {
 		return vo.getNo();
 	}
 	
-	public List<ArticleVO> selectComment(int no) {
+	public List<ArticleEntity> selectComment(int no) {
 		return repo.findByParent(no);
 	}
 	
 	public void updateComment() {}
 	
-	public void deleteComment() {}
+	public void deleteComment(int no) {
+		repo.deleteById(no);
+	}
 	
 }

@@ -10,7 +10,7 @@
 		VALUE (#{title}, #{content}, #{file}, #{uid}, #{regip}, NOW());
 	</insert>
 	<select id="selectArticles" resultType="kr.co.sboard.vo.ArticleVO">
-		SELECT a.*,b.nick FROM `board_article` AS a JOIN `board_users` AS b ON a.uid=b.uid ORDER BY `no` DESC LIMIT #{pg}, 10;
+		SELECT a.*,b.nick FROM `board_article` AS a JOIN `board_users` AS b ON a.uid=b.uid WHERE `parent`=0 ORDER BY `no` DESC LIMIT #{pg}, 10;
 	</select>
 	<select id="countArticles" resultType="int">
 		SELECT COUNT(`no`) FROM `board_article` WHERE `parent`=0;

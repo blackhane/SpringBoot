@@ -21,9 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import kr.co.sboard.Repository.ArticleRepository;
 import kr.co.sboard.dao.ArticleDAO;
-import kr.co.sboard.entity.ArticleEntity;
 import kr.co.sboard.vo.ArticleVO;
 import kr.co.sboard.vo.FileVO;
 import lombok.extern.slf4j.Slf4j;
