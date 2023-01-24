@@ -97,7 +97,9 @@ public class ArticleService {
 	}
 	
 	public void deleteFile(int no) {
+		FileVO vo = dao.selectFile(no);
 		dao.deleteFile(no);
+		fileDelete(vo.getNewName());
 	}
 	
 	
@@ -145,6 +147,18 @@ public class ArticleService {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	//파일 삭제
+	public void fileDelete(String newName) {
+		//파일 경로 지정
+		Path path = Paths.get(uploadPath);
+				
+		//현재 게시판에 존재하는 파일객체를 만듬
+		File file = new File(path + "/" + newName);
+				
+		if(file.exists()) { // 파일이 존재하면
+			file.delete(); // 파일 삭제	
 		}
 	}
 	

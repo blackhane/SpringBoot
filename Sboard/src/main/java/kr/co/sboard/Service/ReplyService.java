@@ -23,7 +23,9 @@ public class ReplyService {
 		return repo.findByParent(no);
 	}
 	
-	public void updateComment() {}
+	public void updateComment(ArticleEntity vo) {
+		repo.save(vo);
+	}
 	
 	public void deleteComment(int no) {
 		repo.deleteById(no);

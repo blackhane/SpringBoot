@@ -122,6 +122,13 @@ public class ArticleController {
 	}
 	
 	@ResponseBody
+	@GetMapping("replyModify")
+	public int replyList(ArticleEntity vo) {
+		service2.updateComment(vo);
+		return 1;
+	}
+	
+	@ResponseBody
 	@DeleteMapping("replyDelete/{no}")
 	public int replyDelete(@PathVariable("no") int no) {
 		service2.deleteComment(no);
