@@ -1,0 +1,58 @@
+<th:block th:include="@{_header.html}"/>
+<th:block th:include="@{board/__${group}__.html}"/>
+<main id="board" class="view">
+<!--
+변수
+/*
+th:value="${articleVO.title}"
+th:if="${articleVO.file == 1}"
+th:href="@{/download(fno=${articleVO.filevo.fno})}" th:text="${articleVO.filevo.oriName}"
+th:text="${articleVO.filevo.download}"
+th:text="${articleVO.content}"
+
+<input type="hidden" name="replyUid" th:value="${#authentication.principal.user.uid}"/>
+<input type="hidden" name="replyNick" th:value="${#authentication.principal.user.nick}"/>
+<input type="hidden" name="no" th:value="${articleVO.no}"/>
+*/
+-->
+    <table>
+        <caption>글보기</caption>
+        <tr>
+            <th>제목</th>
+            <td><input type="text" name="title" readonly/></td>
+        </tr>
+        <tr>
+            <th>파일</th>
+            <td><a ></a>&nbsp;<span ></span>회 다운로드</td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td><textarea name="content" readonly></textarea></td>
+        </tr>
+    </table>
+
+    <div>
+        <a th:href="@{/board/delete(group=${group}, cate=${cate})}" class="btn btnRemove">삭제</a>
+        <a th:href="@{/board/modify(group=${group}, cate=${cate})}" class="btn btnModify">수정</a>
+        <a th:href="@{/board/list(group=${group}, cate=${cate})}" class="btn btnList">목록</a>
+    </div>
+
+    <!-- 댓글목록 -->
+    <section class="commentList">
+        <h3>댓글목록</h3>
+    </section>
+
+    <!-- 댓글쓰기 -->
+    <section class="commentForm">
+        <h3>댓글쓰기</h3>
+        <textarea name="content" class="comment" placeholder="댓글내용 입력"></textarea>
+        <div>
+            <a href="#" class="btn btnCancel">취소</a>
+            <input type="submit" class="btn btnComplete" value="작성완료"/>
+        </div>
+    </section>
+</main>
+</article>
+</section>
+</div>
+<th:block th:include="@{_footer.html}"/>

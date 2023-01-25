@@ -1,0 +1,36 @@
+<th:block th:include="@{_header.html}"/>
+<th:block th:include="@{board/__${group}__.html}"/>
+<main id="board" class="modify">
+<!--
+/*
+ th:value="${articleVO.title}"
+ th:text="${articleVO.content}"
+*/
+-->
+    <form th:action="@{/board/modify}" method="post">
+        <table>
+            <caption>글수정</caption>
+            <tr>
+                <th>제목</th>
+                <td><input type="text" name="title"/></td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td><textarea name="content"></textarea></td>
+            </tr>
+            <tr>
+                <th>파일</th>
+                <td><input type="file" name="fname"/></td>
+            </tr>
+        </table>
+
+        <div>
+            <a th:href="@{/board/view(group=${group}, cate=${cate})}" class="btn btnCancel">취소</a>
+            <input type="submit" value="수정완료" class="btn btnComplete"/>
+        </div>
+    </form>
+</main>
+</article>
+</section>
+</div>
+<th:block th:include="@{_footer.html}"/>

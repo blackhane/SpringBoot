@@ -1,0 +1,46 @@
+<th:block th:include="@{_header.html}"/>
+<th:block th:include="@{board/__${group}__.html}"/>
+<main id="board" class="list">
+
+    <table border="0">
+        <caption>글목록</caption>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>날짜</th>
+            <th>조회</th>
+        </tr>
+        <tr>
+            <td colspan="5"><a th:href="@{/board/view(group=${group}, cate=${cate})}">등록된 게시물이 없습니다.</a></td>
+        </tr>
+        <!--/*<tr th:each="vo,voState:${articles}">
+            <td th:text="${num + voState.count}"></td>
+            <td><a th:href="@{/view(no=${vo.no}, pg=${pg})}">[[${vo.title}]] &#91;[[${vo.comment}]]&#93;</a></td>
+            <td>[[${vo.nick}]]</td>
+            <td>[[${vo.rdate}]]</td>
+            <td>[[${vo.hit}]]</td>
+        </tr>*/-->
+
+    </table>
+
+    <div class="page">
+        <a class="num current">1</a>
+        <!--/*<th:block th:if="${groups[0] > 1}">
+            <a th:href="@{/list(pg=${groups[0]-1})}" class="prev">이전</a>
+        </th:block>
+        <th:block th:each="cnt:${#numbers.sequence(groups[0], groups[1])}">
+            <a th:href="@{/list(pg=${cnt})}" class="num" th:class="${cnt}==${pg} ? 'current' : 'off'" th:text=${cnt}></a>
+        </th:block>
+        <th:block th:if="${groups[1] < groups[2]}">
+            <a th:href="@{/list(pg=${groups[1]+1})}" class="next">다음</a>
+        </th:block>*/-->
+    </div>
+
+    <a th:href="@{/board/write(group=${group}, cate=${cate})}" class="btnWrite">글쓰기</a>
+
+</main>
+</article>
+</section>
+</div>
+<th:block th:include="@{_footer.html}"/>

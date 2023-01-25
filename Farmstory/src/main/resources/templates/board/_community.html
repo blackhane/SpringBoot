@@ -1,0 +1,25 @@
+<div id="sub">
+    <div><img src="../img/sub_top_tit5.png" alt="COMMUNITY"></div>
+    <section class="cate5">
+        <aside>
+            <img src="../img/sub_aside_cate5_tit.png" alt="커뮤니티"/>
+
+            <ul class="lnb">
+                <li th:class="${cate.equals('notice') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=notice)}">공지사항</a></li>
+                <li th:class="${cate.equals('menu') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=menu)}">오늘의식단</a></li>
+                <li th:class="${cate.equals('chef') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=chef)}">나도요리사</a></li>
+                <li th:class="${cate.equals('qna') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=qna)}">1:1고객문의</a></li>
+                <li th:class="${cate.equals('faq') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=faq)}">자주묻는질문</a></li>
+            </ul>
+
+        </aside>
+        <article>
+            <nav>
+                <img th:src="@{'/img/sub_nav_tit_cate5_'+${cate}+'.png'}" th:alt="${cate}"/>
+                <p th:if="${cate.equals('notice')}">HOME > 커뮤니티 > <em>공지사항</em></p>
+                <p th:if="${cate.equals('menu')}">HOME > 커뮤니티 > <em>오늘의식단</em></p>
+                <p th:if="${cate.equals('chef')}">HOME > 커뮤니티 > <em>나도요리사</em></p>
+                <p th:if="${cate.equals('qna')}">HOME > 커뮤니티 > <em>1:1고객문의</em></p>
+                <p th:if="${cate.equals('faq')}">HOME > 커뮤니티 > <em>자주묻는질문</em></p>
+
+            </nav>
