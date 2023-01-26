@@ -11,17 +11,20 @@
             <th>날짜</th>
             <th>조회</th>
         </tr>
-        <tr>
-            <td colspan="5"><a th:href="@{/board/view(group=${group}, cate=${cate})}">등록된 게시물이 없습니다.</a></td>
-        </tr>
-        <!--/*<tr th:each="vo,voState:${articles}">
-            <td th:text="${num + voState.count}"></td>
-            <td><a th:href="@{/view(no=${vo.no}, pg=${pg})}">[[${vo.title}]] &#91;[[${vo.comment}]]&#93;</a></td>
-            <td>[[${vo.nick}]]</td>
-            <td>[[${vo.rdate}]]</td>
-            <td>[[${vo.hit}]]</td>
-        </tr>*/-->
-
+        <th:block th:if="${#lists.size(articles) == 0}">
+            <tr>
+                <td colspan="5"><a th:href="@{/board/view(group=${group}, cate=${cate})}">등록된 게시물이 없습니다.</a></td>
+            </tr>
+        </th:block>
+        <th:block th:unless="${#lists.size(articles) == 0}">
+            <tr th:each="vo,voState:${articles}">
+                <td th:text="${voState.count}"></td>
+                <td><a th:href="@{/board/view(group=${group}, cate=${cate}, no=${vo.no})}">[[${vo.title}]] &#91;[[${vo.comment}]]&#93;</a></td>
+                <td>[[${vo.nick}]]</td>
+                <td>[[${vo.rdate}]]</td>
+                <td>[[${vo.hit}]]</td>
+            </tr>
+        </th:block>
     </table>
 
     <div class="page">

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.farmstory.dao.ArticleDAO">
+	<insert id="insertArticle">
+        INSERT INTO `board_article` SET
+            `no` = #{no},
+            `cate` = #{cate},
+            `title` = #{title},
+            `content` = #{content},
+            `file` = #{file},
+            `uid` = #{uid},
+            `regip` = #{regip},
+            `rdate` = NOW(),
+            `nick` = #{nick};
+    </insert>
+    
+    <select id="selectArticles" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `cate`=#{cate} ORDER BY `no` DESC;
+    </select>
+    
+    <select id="selectArticle" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `no`=#{no};
+    </select>
+    
+    <update id="updateArticle">
+        UPDATE `board_article` SET
+            `title` = #{title},
+            `content` = #{content},
+            `rdate` = NOW()
+            WHERE `no`=#{no};
+    </update>
+    
+    <delete id="deleteArticle">
+        DELETE FROM `board_article` WHERE `no`=#{no} OR `parent`=#{no};
+    </delete>
+
+    <insert id="insetComment">
+        INSERT INTO `board_article` SET
+            `parent` = #{parent},
+            `content` = #{content},
+            `uid` = #{uid},
+            `regip` = #{regip},
+            `rdate` = NOW(),
+            `nick` = #{nick};
+    </insert>
+    
+    <select id="selectComment" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `parent`=#{no};
+    </select>
+    
+    <update id="updateComment">
+        UPDATE `board_article` SET
+            `content` = #{content}
+            WHERE `no`=#{no};
+    </update>
+    
+    <delete id="deleteComment">
+        DELETE FROM `board_article` WHERE `no`=#{no};
+    </delete>
+
+    <update id="updateArticleHitUp">
+        UPDATE `board_article` SET
+        `hit` = `hit`+1
+        WHERE `no`=#{no}
+    </update>
+    
+    <update id="updateArticleCommentUp">
+        UPDATE `board_article` SET
+            `comment` = `comment`+1
+            WHERE `no`=#{no}
+    </update>
+    
+    <update id="updateArticleCommentDown">
+        UPDATE `board_article` SET
+            `comment` = `comment`-1
+            WHERE `no`=#{no}
+    </update>
+    
+    <select id="selectIndexStory" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `cate`='story' ORDER BY `no` DESC LIMIT 5;
+    </select>
+
+    <select id="selectIndexGrow" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `cate`='grow' ORDER BY `no` DESC LIMIT 5;
+    </select>
+
+    <select id="selectIndexSchool" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `cate`='school' ORDER BY `no` DESC LIMIT 5;
+    </select>
+
+    <select id="selectIndexTab" resultType="kr.co.farmstory.vo.ArticleVO">
+        SELECT * FROM `board_article` WHERE `cate`=#{cate} ORDER BY `no` DESC LIMIT 3;
+    </select>
+
+</mapper>

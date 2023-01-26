@@ -1,39 +1,135 @@
 <th:block th:include="@{_header.html}"/>
 <th:block th:include="@{board/__${group}__.html}"/>
-<main id="board" class="view">
-<!--
-변수
-/*
-th:value="${articleVO.title}"
-th:if="${articleVO.file == 1}"
-th:href="@{/download(fno=${articleVO.filevo.fno})}" th:text="${articleVO.filevo.oriName}"
-th:text="${articleVO.filevo.download}"
-th:text="${articleVO.content}"
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+    $(function(){
+        list();
 
-<input type="hidden" name="replyUid" th:value="${#authentication.principal.user.uid}"/>
-<input type="hidden" name="replyNick" th:value="${#authentication.principal.user.nick}"/>
-<input type="hidden" name="no" th:value="${articleVO.no}"/>
-*/
--->
+        //댓글
+        function list(){
+            let uid = $('input[name=replyUid]').val();
+            let no = $('input[name=no]').val();
+            $.ajax({
+                url : 'replyList/'+no,
+                method : 'get',
+                dataType : 'json',
+                success : function(data){
+                    $('.commentList > article').remove();
+                    $('.commentList > p').remove();
+                    if(data.length == 0){
+                            let tag = "<p class='empty'>등록된 댓글이 없습니다.</p>";
+                            $('.commentList').append(tag);
+                    }else{
+                        for(i in data){
+                            let tag = "<article>";
+                                tag += "<span class='nick'>"+data[i].nick+"</span>&nbsp;";
+                                tag += "<span class='date'>"+data[i].rdate+"</span>  ";
+                                tag += "<p class='content'>"+data[i].content+"</p>";
+                            if(uid == data[i].uid){
+                                tag += "<div>";
+                                tag += "<a href='#' onclick = 'return false;' class='remove' data-no='"+data[i].no+"'>삭제</a>&nbsp;";
+                                tag += "<a href='#' onclick = 'return false;' class='modify' data-no='"+data[i].no+"'>수정</a>";
+                                tag += "</div>";
+                            }
+                            tag += "</article> ";
+                            $('.commentList').append(tag);
+                        }
+                    }
+                }
+            });
+        };
+
+        //등록
+        $('.btnComplete').click(function(){
+            let uid = $('input[name=replyUid]').val();
+            let nick = $('input[name=replyNick]').val();
+            let parent = $('input[name=no]').val();
+            let content = $('.comment').val();
+            let jsonData = {
+                    'uid' : uid,
+                    'nick' : nick,
+                    'parent' : parent,
+                    'content' : content
+            }
+            console.log(jsonData);
+            $.ajax({
+                url : 'replyRegister',
+                method : 'post',
+                data : jsonData,
+                dataType : 'json',
+                success : function(data){
+                    list();
+                    $('.comment').val('');
+                }
+            });
+        });
+
+        //삭제
+        $(document).on('click','.remove', function(){
+            let no = $(this).data('no');
+            let parent = $('input[name=no]').val();
+            let jsonData = {
+                'no' : no,
+                'parent' : parent
+            }
+            $.ajax({
+                url : 'replyDelete',
+                method : 'delete',
+                data : jsonData,
+                dataType : 'json',
+                success : function(data){
+                    if(data > 0){
+                        list();
+                    }
+                }
+            });
+        });
+
+        //수정
+        $(document).on('click','.modify', function(){
+            let no = $(this).data('no');
+            let jsonData = {
+                'no' : no,
+                'content' : content,
+            }
+
+            $.ajax({
+                url : 'replyModify',
+                method : 'put',
+                data : jsonData,
+                dataType : 'json',
+                success : function(data){
+                    if(data > 0){
+                        list();
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+<main id="board" class="view">
     <table>
         <caption>글보기</caption>
         <tr>
             <th>제목</th>
-            <td><input type="text" name="title" readonly/></td>
+            <td><input type="text" name="title" readonly th:value="${vo.title}"/></td>
         </tr>
-        <tr>
+        <tr th:if="${vo.file == 1}">
             <th>파일</th>
-            <td><a ></a>&nbsp;<span ></span>회 다운로드</td>
+            <td>회 다운로드</td>
         </tr>
         <tr>
             <th>내용</th>
-            <td><textarea name="content" readonly></textarea></td>
+            <td><textarea name="content" readonly th:text="${vo.content}"></textarea></td>
         </tr>
     </table>
 
     <div>
-        <a th:href="@{/board/delete(group=${group}, cate=${cate})}" class="btn btnRemove">삭제</a>
-        <a th:href="@{/board/modify(group=${group}, cate=${cate})}" class="btn btnModify">수정</a>
+        <th:block th:if="${#authentication.principal.user.uid == vo.uid}">
+        <a th:href="@{/board/delete(group=${group}, cate=${cate}, no=${vo.no})}" class="btn btnRemove">삭제</a>
+        <a th:href="@{/board/modify(group=${group}, cate=${cate}, no=${vo.no})}" class="btn btnModify">수정</a>
+        </th:block>
         <a th:href="@{/board/list(group=${group}, cate=${cate})}" class="btn btnList">목록</a>
     </div>
 
@@ -45,6 +141,9 @@ th:text="${articleVO.content}"
     <!-- 댓글쓰기 -->
     <section class="commentForm">
         <h3>댓글쓰기</h3>
+        <input type="hidden" name="replyUid" th:value="${#authentication.principal.user.uid}"/>
+        <input type="hidden" name="replyNick" th:value="${#authentication.principal.user.nick}"/>
+        <input type="hidden" name="no" th:value="${vo.no}"/>
         <textarea name="content" class="comment" placeholder="댓글내용 입력"></textarea>
         <div>
             <a href="#" class="btn btnCancel">취소</a>

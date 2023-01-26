@@ -1,6 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="@{_header.html}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:src="@{/js/postcode.js}"></script>
+<script th:src="@{/js/validation.js}"></script>
         <main id="user" class="register">
-
             <form th:action="@{/user/register}" method="post">
                 <table border="1">
                     <caption>사이트 이용정보 입력</caption>
@@ -74,3 +79,4 @@
             </form>            
         </main>
 <th:block th:include="@{_footer.html}"/>
+</html>
