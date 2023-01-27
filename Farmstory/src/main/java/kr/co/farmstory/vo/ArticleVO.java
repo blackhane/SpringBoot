@@ -2,6 +2,7 @@ package kr.co.farmstory.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -19,7 +20,8 @@ public class ArticleVO {
     private String regip;
     private String rdate;
     private String nick;
-    private String fname;
+    private MultipartFile fname;
+    private FileVO filevo;
 
     public String getRdate() {
         return rdate.substring(2,10);

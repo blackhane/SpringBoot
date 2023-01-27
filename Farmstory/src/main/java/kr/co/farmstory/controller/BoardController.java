@@ -2,14 +2,20 @@ package kr.co.farmstory.controller;
 
 import kr.co.farmstory.service.ArticleService;
 import kr.co.farmstory.vo.ArticleVO;
+import kr.co.farmstory.vo.FileVO;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,23 +29,40 @@ public class BoardController {
     private ArticleService service;
 
     @GetMapping("board/list")
-    public String list(Model model, String group, String cate){
+    public String list(Model model, String group, String cate, int pg){
         model.addAttribute("group", group);
         model.addAttribute("cate", cate);
-        List<ArticleVO> articles = service.selectArticles(cate);
-        log.info("게시물 : " + articles.size());
+        List<ArticleVO> articles = service.selectArticles(cate, pg);
+        //페이징///////////////////////////////////////////////////////////
+        int lastPageNum = service.countArticles(cate);
+        int[] groups = service.currentPageGroup(pg, lastPageNum);
+        int num = (pg - 1) * 10;
+        ///////////////////////////////////////////////////////////////////
         model.addAttribute("articles", articles);
+        model.addAttribute("groups", groups);
+        model.addAttribute("pg", pg);
+        model.addAttribute("num", num);
         return "board/list";
     }
 
     @GetMapping("board/view")
-    public String view(Model model, String group, String cate, int no){
+    public String view(Model model, String group, String cate, int no, int pg){
         model.addAttribute("group", group);
         model.addAttribute("cate", cate);
+        model.addAttribute("pg", pg);
         ArticleVO vo = service.selectArticle(no);
         service.updateArticleHitUp(no);
         model.addAttribute("vo", vo);
         return "board/view";
+    }
+
+    @GetMapping("download")
+    public ResponseEntity<Resource> download(int fno) throws IOException {
+        FileVO vo = service.selectFile(fno);
+        service.updateFileDownload(fno);
+
+        ResponseEntity<Resource> respEntity = service.fileDownload(vo);
+        return respEntity;
     }
 
     @GetMapping("board/write")
@@ -53,28 +76,30 @@ public class BoardController {
     public String write(String group, String cate, ArticleVO vo, HttpServletRequest request){
         vo.setRegip(request.getRemoteAddr());
         service.insertArticle(vo);
-        return "redirect:/board/list?group="+group+"&cate="+cate;
+        return "redirect:/board/list?group="+group+"&cate="+cate+"&pg=1";
     }
 
     @GetMapping("board/modify")
-    public String modify(Model model, String group, String cate, int no){
+    public String modify(Model model, String group, String cate, int no, int pg){
         model.addAttribute("group", group);
         model.addAttribute("cate", cate);
+        model.addAttribute("pg", pg);
         ArticleVO vo = service.selectArticle(no);
         model.addAttribute("vo", vo);
         return "board/modify";
     }
 
     @PostMapping("board/modify")
-    public String modify(String group, String cate, ArticleVO vo){
+    public String modify(String group, String cate, ArticleVO vo, int pg){
         service.updateArticle(vo);
-        return "redirect:/board/view?group="+group+"&cate="+cate+"&no="+vo.getNo();
+        return "redirect:/board/view?group="+group+"&cate="+cate+"&no="+vo.getNo()+"&pg="+pg;
     }
 
     @GetMapping("board/delete")
-    public String delete(String group, String cate, int no){
+    public String delete(String group, String cate, int no, int pg, String newName){
         service.deleteArticle(no);
-        return "redirect:/board/list?group="+group+"&cate="+cate;
+        service.deleteFile(no, newName);
+        return "redirect:/board/list?group="+group+"&cate="+cate+"&pg="+pg;
     }
 
     @ResponseBody

@@ -5,9 +5,9 @@
             <img src="../img/sub_aside_cate3_tit.png" alt="농작물이야기"/>
 
             <ul class="lnb">
-                <li th:class="${cate.equals('story') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_croptalk, cate=story)}">농작물이야기</a></li>
-                <li th:class="${cate.equals('grow') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_croptalk, cate=grow)}">텃밭가꾸기</a></li>
-                <li th:class="${cate.equals('school') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_croptalk, cate=school)}">귀농학교</a></li>
+                <li th:class="${cate.equals('story') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_croptalk, cate=story, pg=1)}">농작물이야기</a></li>
+                <li th:class="${cate.equals('grow') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_croptalk, cate=grow, pg=1)}">텃밭가꾸기</a></li>
+                <li th:class="${cate.equals('school') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_croptalk, cate=school, pg=1)}">귀농학교</a></li>
             </ul>
 
         </aside>

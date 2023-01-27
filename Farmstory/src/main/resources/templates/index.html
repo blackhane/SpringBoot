@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="@{_header.html}"/>
-<script>
+<script th:inline="javascript">
     $(function(){
         index('notice');
 
@@ -18,7 +18,7 @@
                 success : function(data){
                     $('.txt').empty();
                     for(i in data){
-                        let tag = "<li><a th:href='@{/board/view(group=_community, cate="+data[i].cate+", no="+data[i].no+")}'>· "+data[i].title+"</a></li>";
+                        let tag = "<li><a href='/Farmstory/board/view?group=_community&cate="+data[i].cate+"&no="+data[i].no+"&pg=1'>· "+data[i].title+"</a></li>";
                         $('.txt').append(tag);
                     }
 
@@ -45,8 +45,8 @@
     </div>
 
     <div class="quick">
-        <a th:href="@{/board/list(group=_community, cate=menu)}"><img src="./img/main_banner_sub1_tit.png" alt="오늘의 식단"></a>
-        <a th:href="@{/board/list(group=_community, cate=chef)}"><img src="./img/main_banner_sub2_tit.png" alt="나도 요리사"></a>
+        <a th:href="@{/board/list(group=_community, cate=menu, pg=1)}"><img src="./img/main_banner_sub1_tit.png" alt="오늘의 식단"></a>
+        <a th:href="@{/board/list(group=_community, cate=chef, pg=1)}"><img src="./img/main_banner_sub2_tit.png" alt="나도 요리사"></a>
     </div>
 
     <div class="latest">
@@ -56,7 +56,7 @@
             <table>
                 <tr th:each="vo:${vo1}">
                     <td>></td>
-                    <td><a th:href="@{/board/view(group=_croptalk, cate=${vo.cate}, no=${vo.no})}">[[${vo.title}]]</a></td>
+                    <td><a th:href="@{/board/view(group=_croptalk, cate=${vo.cate}, no=${vo.no}, pg=1)}">[[${vo.title}]]</a></td>
                     <td>[[${vo.rdate}]]</td>
                 </tr>
             </table>
@@ -67,7 +67,7 @@
             <table>
                 <tr th:each="vo:${vo2}">
                     <td>></td>
-                    <td><a th:href="@{/board/view(group=_croptalk, cate=${vo.cate}, no=${vo.no})}">[[${vo.title}]]</a></td>
+                    <td><a th:href="@{/board/view(group=_croptalk, cate=${vo.cate}, no=${vo.no}, pg=1)}">[[${vo.title}]]</a></td>
                     <td>[[${vo.rdate}]]</td>
                 </tr>
             </table>
@@ -78,7 +78,7 @@
             <table>
                 <tr th:each="vo:${vo3}">
                     <td>></td>
-                    <td><a th:href="@{/board/view(group=_croptalk, cate=${vo.cate}, no=${vo.no})}">[[${vo.title}]]</a></td>
+                    <td><a th:href="@{/board/view(group=_croptalk, cate=${vo.cate}, no=${vo.no}, pg=1)}">[[${vo.title}]]</a></td>
                     <td>[[${vo.rdate}]]</td>
                 </tr>
             </table>
@@ -99,8 +99,8 @@
                 </p>
             </div>
             <div class="btns">
-                <a th:href="@{/board/list(group=_community, cate=qna)}"><img src="./img/main_sub2_cs_bt1.png" alt="1:1 고객문의"></a>
-                <a th:href="@{/board/list(group=_community, cate=faq)}"><img src="./img/main_sub2_cs_bt2.png" alt="자주묻는질문"></a>
+                <a th:href="@{/board/list(group=_community, cate=qna, pg=1)}"><img src="./img/main_sub2_cs_bt1.png" alt="1:1 고객문의"></a>
+                <a th:href="@{/board/list(group=_community, cate=faq, pg=1)}"><img src="./img/main_sub2_cs_bt2.png" alt="자주묻는질문"></a>
                 <a href="#"><img src="./img/main_sub2_cs_bt3.png" alt="배송조회"></a>
             </div>
         </div>

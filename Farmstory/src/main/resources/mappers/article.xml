@@ -4,7 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace = mapper파일의 아이디 값 -->
 <mapper namespace="kr.co.farmstory.dao.ArticleDAO">
-	<insert id="insertArticle">
+    <!--게시물-->
+	<insert id="insertArticle" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO `board_article` SET
             `no` = #{no},
             `cate` = #{cate},
@@ -16,13 +17,34 @@
             `rdate` = NOW(),
             `nick` = #{nick};
     </insert>
-    
+
     <select id="selectArticles" resultType="kr.co.farmstory.vo.ArticleVO">
-        SELECT * FROM `board_article` WHERE `cate`=#{cate} ORDER BY `no` DESC;
+        SELECT * FROM `board_article` WHERE `cate`=#{arg0} ORDER BY `no` DESC LIMIT #{arg1},10;
     </select>
-    
-    <select id="selectArticle" resultType="kr.co.farmstory.vo.ArticleVO">
-        SELECT * FROM `board_article` WHERE `no`=#{no};
+
+    <select id="countArticles" resultType="int">
+        SELECT COUNT(`NO`) FROM `board_article` WHERE `cate`=#{cate};
+    </select>
+
+    <resultMap type="kr.co.farmstory.vo.ArticleVO" id="selectArticleResultMap">
+        <id column="no" property="no"/>
+        <result column="comment" property="comment"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="file" property="file"/>
+        <result column="uid" property="uid"/>
+        <result column="regip" property="regip"/>
+        <result column="rdate" property="rdate"/>
+        <association property="filevo" javaType="kr.co.farmstory.vo.FileVO">
+            <id column="fno" property="fno"/>
+            <result column="parent" property="parent"/>
+            <result column="newName" property="newName"/>
+            <result column="oriName" property="oriName"/>
+            <result column="download" property="download"/>
+        </association>
+    </resultMap>
+    <select id="selectArticle" resultMap="selectArticleResultMap">
+        SELECT * FROM `board_article` AS a LEFT JOIN `board_file` AS b ON a.`no`=b.`parent` WHERE `no`=#{no};
     </select>
     
     <update id="updateArticle">
@@ -37,6 +59,26 @@
         DELETE FROM `board_article` WHERE `no`=#{no} OR `parent`=#{no};
     </delete>
 
+    <!--파일-->
+    <insert id="insertFile">
+        INSERT INTO `board_file`
+        (`parent`, `newName`, `oriName`, `rdate`)
+        VALUE (#{parent}, #{newName}, #{oriName}, NOW());
+    </insert>
+
+    <select id="selectFile" resultType="kr.co.farmstory.vo.FileVO">
+        SELECT * FROM `board_file` WHERE `fno`=#{fno};
+    </select>
+
+    <select id="updateFileDownload">
+        UPDATE `board_file` SET `download`=`download`+1 WHERE `fno`=#{fno};
+    </select>
+
+    <delete id="deleteFile">
+        DELETE FROM `board_file` WHERE `parent`=#{no};
+    </delete>
+
+    <!--댓글-->
     <insert id="insetComment">
         INSERT INTO `board_article` SET
             `parent` = #{parent},
@@ -78,7 +120,8 @@
             `comment` = `comment`-1
             WHERE `no`=#{no}
     </update>
-    
+
+    <!--메인페이지-->
     <select id="selectIndexStory" resultType="kr.co.farmstory.vo.ArticleVO">
         SELECT * FROM `board_article` WHERE `cate`='story' ORDER BY `no` DESC LIMIT 5;
     </select>

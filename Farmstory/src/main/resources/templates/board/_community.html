@@ -5,11 +5,11 @@
             <img src="../img/sub_aside_cate5_tit.png" alt="커뮤니티"/>
 
             <ul class="lnb">
-                <li th:class="${cate.equals('notice') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=notice)}">공지사항</a></li>
-                <li th:class="${cate.equals('menu') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=menu)}">오늘의식단</a></li>
-                <li th:class="${cate.equals('chef') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=chef)}">나도요리사</a></li>
-                <li th:class="${cate.equals('qna') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=qna)}">1:1고객문의</a></li>
-                <li th:class="${cate.equals('faq') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=faq)}">자주묻는질문</a></li>
+                <li th:class="${cate.equals('notice') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=notice, pg=1)}">공지사항</a></li>
+                <li th:class="${cate.equals('menu') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=menu, pg=1)}">오늘의식단</a></li>
+                <li th:class="${cate.equals('chef') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=chef, pg=1)}">나도요리사</a></li>
+                <li th:class="${cate.equals('qna') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=qna, pg=1)}">1:1고객문의</a></li>
+                <li th:class="${cate.equals('faq') ? 'on' : 'off'}"><a th:href="@{/board/list(group=_community, cate=faq, pg=1)}">자주묻는질문</a></li>
             </ul>
 
         </aside>

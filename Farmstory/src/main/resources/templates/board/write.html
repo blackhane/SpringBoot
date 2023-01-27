@@ -1,5 +1,22 @@
 <th:block th:include="@{_header.html}"/>
 <th:block th:include="@{board/__${group}__.html}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('form').submit(function(){
+            if($('input[name=title]').val() == ''){
+                alert('제목을 입력해주세요.');
+                return false;
+            }else if($('textarea[name=content]').val().length == 0){
+                alert('내용을 입력해주세요.');
+                return false;
+            }else{
+                return true;
+            }
+            return false;
+        });
+    });
+</script>
 <main id="board" class="write">
 
     <form th:action="@{/board/write}" method="post" enctype="multipart/form-data">
@@ -19,11 +36,11 @@
             </tr>
             <tr>
                 <th>파일</th>
-                <!--/*<td><input type="file" name="fname"/></td>*/-->
+                <td><input type="file" name="fname"/></td>
             </tr>
         </table>
         <div>
-            <a th:href="@{/board/list(group=${group}, cate=${cate})}" class="btn btnCancel">취소</a>
+            <a th:href="@{/board/list(group=${group}, cate=${cate}, pg=1)}" class="btn btnCancel">취소</a>
             <input type="submit" value="작성완료" class="btn btnComplete"/>
         </div>
     </form>
