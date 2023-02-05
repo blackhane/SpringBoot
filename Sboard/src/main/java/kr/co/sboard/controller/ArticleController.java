@@ -98,9 +98,9 @@ public class ArticleController {
 	}
 	
 	@GetMapping("delete")
-	public String delete(int no) {
+	public String delete(int no, String newName) {
 		service.deleteArticle(no);
-		service.deleteFile(no);
+		service.deleteFile(no, newName);
 		return "redirect:/list?pg=1";
 	}
 	

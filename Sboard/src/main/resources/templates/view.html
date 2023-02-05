@@ -139,7 +139,7 @@
             </table>
 
             <div>
-                <a th:href="@{/delete(no=${articleVO.no})}" class="btn btnRemove">삭제</a>
+                <a th:href="@{/delete(no=${articleVO.no}, newName=${articleVO.filevo.newName})}" class="btn btnRemove">삭제</a>
                 <a th:href="@{/modify(no=${articleVO.no}, pg=${pg})}" class="btn btnModify">수정</a>
                 <a th:href="@{/list(pg=${pg})}" class="btn btnList">목록</a>
             </div>
