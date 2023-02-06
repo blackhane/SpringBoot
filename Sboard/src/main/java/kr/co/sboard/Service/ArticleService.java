@@ -96,10 +96,9 @@ public class ArticleService {
 		return dao.deleteArticle(no);
 	}
 	
-	public void deleteFile(int no) {
-		FileVO vo = dao.selectFile(no);
+	public void deleteFile(int no, String newName) {
 		dao.deleteFile(no);
-		fileDelete(vo.getNewName());
+		fileDelete(newName);
 	}
 	
 	
