@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import kr.co.sboard.Repository.UserRepository;
 import kr.co.sboard.entity.UserEntity;
 
-
 @Service
 public class SecurtyUserService implements UserDetailsService {
 
@@ -18,7 +17,6 @@ public class SecurtyUserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
 		//시큐리티가 얘를 실행해서 인증처리를 함
 		
 		//DB에 해당 아이디가 있는지 확인
