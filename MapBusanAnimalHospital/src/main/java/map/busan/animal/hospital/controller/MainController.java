@@ -24,7 +24,7 @@ public class MainController {
 	@GetMapping(value = {"/", "/index"})
 	public String index(Model model) {
 		String apiURL = "http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital";
-		String serviceKey = "???";
+		String serviceKey = "acXDwhIUHfY5bCS05QeBJotV3O1%2BQDzfdRFoQVMGzd7nPo40FxrfPfBnq53s0MYPFWwDj5eHaQF7AKoiOSxOWA%3D%3D";
 		String resultType = "json";
 		String pageNo = "1";
 		String numOfRows = "100";
@@ -48,7 +48,7 @@ public class MainController {
 		try {
 			ResultVO resultVO = om.readValue(jsonData, ResultVO.class);
 			List<ItemVO> items = resultVO.getGetTblAnimalHospital().getBody().getItems().getItem();
-			System.out.println(items);
+			//System.out.println(items);
 			model.addAttribute("items", items);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
