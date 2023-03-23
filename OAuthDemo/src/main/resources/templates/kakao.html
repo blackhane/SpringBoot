@@ -1,15 +1,39 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Kakao Login Demo</title>
-<!-- 카카오 스크립트 -->
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-</head>
-<body>
-	<a href="https://kauth.kakao.com/oauth/authorize?
-	client_id=368881566ddec1023c057380b4217c71
-	&redirect_uri=http://localhost:8080/auth/kakao/callback
-	&response_type=code">카카오 로그인</a>
-</body>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<meta charset="UTF-8">
+		<title>카카오 로그인</title>
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+	<style>
+		a.login {
+			display: inline-block;
+			width: 300px;
+		    height: 45px;
+		    border: none;
+		    cursor: pointer;
+			background-image: url("../img/kakao_login_medium_wide.png");
+		}
+	</style>
+	<body>
+		<th:block th:if="${entity == null}">
+			<a href="https://kauth.kakao.com/oauth/authorize?
+			client_id=368881566ddec1023c057380b4217c71
+			&redirect_uri=http://localhost:8080/auth/kakao/callback
+			&response_type=code" 
+			class="login"></a>
+		</th:block>
+		<th:block th:if="${entity != null}">
+			<ul >
+				<p>아이디 : [[${entity.uid}]]</p>
+				<p>이름 : [[${entity.nickname}]]</p>
+				<p>이메일 : [[${entity.email}]]</p>
+			</ul>
+		<a href="kakaoLogout" class="logout">로그아웃</a>
+		<a href="kakaoUnlink" class="logout">탈퇴</a>
+		</th:block>
+		
+	</body>
 </html>
