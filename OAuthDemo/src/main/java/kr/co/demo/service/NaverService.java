@@ -1,4 +1,4 @@
-package kr.co.demo;
+package kr.co.demo.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,21 +12,23 @@ import org.springframework.stereotype.Service;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import kr.co.demo.vo.UserEntity;
 
 @Service
-public class kakaoService {
-
-	private static String APP_KEY = "368881566ddec1023c057380b4217c71";
-	private static String REDIRECT_URI = "http://localhost:8080/auth/kakao/callback";
+public class NaverService {
+	
+	private static String APP_KEY = "9hQUHwDsCQkeLH2KhKb9";
+	private static String REDIRECT_URI = "http://localhost:8080/auth/naver/callback";
+	//절대 유출 금지
+	private static String SECRET_KEY = "";
 	
 	//토큰값 가져오기
-	//https://suyeoniii.tistory.com/81
 	public String getAccessToken(String code) {
 		String access_Token = "";
 		String refresh_Token = "";
 		
 		try {
-			URL url = new URL("https://kauth.kakao.com/oauth/token");
+			URL url = new URL("https://nid.naver.com/oauth2.0/token");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			
 			//POST 요청을 위해 기본값이 false인 setDoOutPut을 true로
@@ -38,6 +40,7 @@ public class kakaoService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id="+APP_KEY); //REST_API KEY값
+			sb.append("&client_secret="+SECRET_KEY); //REST_API KEY값
 			sb.append("&redirect_uri="+REDIRECT_URI); //인가코드를 받은 REDIRECT_URI
 			sb.append("&code="+code);
 			bw.write(sb.toString());
@@ -74,5 +77,53 @@ public class kakaoService {
 		}
 		
 		return access_Token;
+	}
+	
+	public void getNaverUserInfo(String token) {
+		
+		UserEntity vo = new UserEntity();
+		String reqURL = "https://openapi.naver.com/v1/nid/me";
+		
+		//토큰을 이용하여 사용자 정보 조회
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			conn.setRequestMethod("GET");
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Authorization", "Bearer " + token);
+			
+			//결과가 200이면 성공
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+			
+			//요청을 통해 얻은 JSON타입의 Response 메세지 읽기
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line = "";
+			String result = "";
+			
+			while((line = br.readLine()) != null) {
+				result += line;
+			}
+			System.out.println("response body : " + result);
+			
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(result);
+			
+			String id = element.getAsJsonObject().get("response").getAsJsonObject().get("id").getAsString();
+			String name = element.getAsJsonObject().get("response").getAsJsonObject().get("name").getAsString();
+			String email = element.getAsJsonObject().get("response").getAsJsonObject().get("email").getAsString();
+			String mobile = element.getAsJsonObject().get("response").getAsJsonObject().get("mobile").getAsString();
+			System.out.println("id : " + id);
+			System.out.println("name : " + name);
+			System.out.println("email : " + email);
+			System.out.println("mobile : " + mobile);
+			
+			br.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
