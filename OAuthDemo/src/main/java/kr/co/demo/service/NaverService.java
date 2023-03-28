@@ -17,7 +17,7 @@ import kr.co.demo.vo.UserEntity;
 @Service
 public class NaverService {
 	
-	private static String APP_KEY = "9hQUHwDsCQkeLH2KhKb9";
+	private static String APP_KEY = "";
 	private static String REDIRECT_URI = "http://localhost:8080/auth/naver/callback";
 	//절대 유출 금지
 	private static String SECRET_KEY = "";

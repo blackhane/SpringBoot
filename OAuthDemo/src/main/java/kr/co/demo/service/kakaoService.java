@@ -28,7 +28,7 @@ public class kakaoService {
 	private UserRepository repo;
 	
 	private static String APP_KEY = "";
-	private static String REDIRECT_URI = "";
+	private static String REDIRECT_URI = "http://localhost:8080/auth/kakao/callback";
 	
 	//토큰값 가져오기
 	public String getAccessToken(String code) {
