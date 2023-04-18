@@ -1,12 +1,8 @@
 package kr.co.ch09.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@Builder
+@Data
 public class User1VO {
 
 	private String uid;
