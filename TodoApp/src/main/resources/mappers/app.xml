@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.todo.dao.AppDao">
+
+	<insert id="insertTodo" useGeneratedKeys="true" keyColumn="no" keyProperty="no">
+		INSERT INTO `todo` SET `content`=#{content},`rdate`=NOW();
+	</insert>
+	<select id="selectTodo" resultType="kr.co.todo.vo.TodoVO"></select>
+	<select id="selectTodos" resultType="kr.co.todo.vo.TodoVO">
+		SELECT * FROM `todo` ORDER BY `no` DESC;
+	</select>
+	<update id="updateTodo"></update>
+	<delete id="deleteTodo">
+		DELETE FROM `todo` WHERE `no`=#{no};
+	</delete>
+	<delete id="deleteTodos">
+		DELETE FROM `todo`;
+	</delete>
+	
+</mapper>
