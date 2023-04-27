@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.vboard.dao.ArticleDAO">
+	<insert id="insertArticle">
+		INSERT INTO `board_article` (`title`,`content`,`uid`,`regip`,`rdate`)
+		VALUE (#{title},#{content},#{uid},#{regip},NOW());
+	</insert>
+	<select id="selectArticles" resultType="kr.co.vboard.vo.ArticleVO">
+		SELECT a.*,b.nick FROM `board_article` AS a JOIN `board_users` AS b ON a.uid=b.uid WHERE `parent`=0 ORDER BY `no` DESC LIMIT #{pg}, 10;
+	</select>
+	<select id="countArticles" resultType="int">
+		SELECT COUNT(`no`) FROM `board_article` WHERE `parent`=0;
+	</select>
+</mapper>
