@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>    
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+	    function postcode() {
+	    	new daum.Postcode({
+	    		oncomplete: function(data) {
+	    			// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+	    			// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	    			// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	    			var addr = ''; // 주소 변수
+	
+	    			//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	    			if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	    				addr = data.roadAddress;
+	    			} else { // 사용자가 지번 주소를 선택했을 경우(J)
+	    				addr = data.jibunAddress;
+	    			}
+	
+	    			// 우편번호와 주소 정보를 해당 필드에 넣는다.
+	    			document.getElementById('zip').value = data.zonecode;
+	    			document.getElementById("addr1").value = addr;
+	    			// 커서를 상세주소 필드로 이동한다.
+	    			document.getElementById("addr2").focus();
+	    		}
+	    	}).open();
+	    }
+	    
+    	$(function(){
+    		
+    		let uidChk = false;
+    		let pass1Chk = false;
+    		let pass2Chk = false;
+    		let nameChk = false;
+    		let nickChk = false;
+    		let emailChk = false;
+    		let hpChk = false;
+
+    		var regName = /^[가-힣]{2,4}$/;
+    		var regMail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    		var regHp = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
+    		
+    		$('input[name=uid]').keyup(function(){
+    			uidChk = false;
+    		});
+    		
+    		$('#checkUid').click(function(){
+    			let uid = $('input[name=uid]').val();
+    			
+    			if(uid.trim().length == 0){
+    				alert("아이디를 입력해주세요.");
+    				return false;
+    			}
+    			
+    			$.ajax({
+    				url : '/checkUid',
+    				method : 'post',
+    				data : {'uid' : uid},
+    				dataType : 'json',
+    				beforeSend: function (jqXHR, settings) {
+    			           var header = $("meta[name='_csrf_header']").attr("content");
+    			           var token = $("meta[name='_csrf']").attr("content");
+    			           jqXHR.setRequestHeader(header, token);
+    				},
+    				success : function(data){
+    					if(data.rs == 1){
+    						alert("사용중인 아이디입니다.");
+    					}else{
+    						alert("사용가능한 아이디입니다.");
+    						uidChk = true;
+    					}
+    				}
+    			});
+    		});
+    		
+    		$('input[name=pass1]').keyup(function(){
+    			pass1Chk = false;
+    		});
+    		    		
+    		$('input[name=pass2]').keyup(function(){
+    			pass2Chk = false;
+				$('.passOk').css('display','none');
+				$('.passNo').css('display','none');
+    			
+    			let pass1 = $('input[name=pass1]').val();
+    			let pass2 = $(this).val();
+    			
+    			if(pass2.trim() == ""){
+    				return false;
+    			}
+    			
+    			if(pass1 == pass2){
+    				pass1Chk = true;
+    				pass2Chk = true;
+    				$('.passOk').css('display','inline');
+    				$('.passNo').css('display','none');
+    			}else{
+    				pass1Chk = false;
+    				pass2Chk = false;
+    				$('.passOk').css('display','none');
+    				$('.passNo').css('display','inline');
+    			}
+    		});
+    		
+    		$('input[name=name]').keyup(function(){
+    			nameChk = false;
+    		});
+    		
+    		$('input[name=name]').focusout(function(){
+    			let name = $(this).val();
+    			if(name.match(regName)){
+    				nameChk = true;
+    			}
+    		});
+    		
+    		$('input[name=nick]').keyup(function(){
+    			nickChk = false;
+    		});
+    		
+    		$('#checkNick').click(function(){
+    			let nick = $('input[name=nick]').val();
+    			
+    			if(nick.trim().length == 0){
+    				alert("별명을 입력해주세요.");
+    				return false;
+    			}
+    			
+    			$.ajax({
+    				url : '/checkNick',
+    				method : 'post',
+    				data : {'nick' : nick},
+    				dataType : 'json',
+    				beforeSend: function (jqXHR, settings) {
+    			           var header = $("meta[name='_csrf_header']").attr("content");
+    			           var token = $("meta[name='_csrf']").attr("content");
+    			           jqXHR.setRequestHeader(header, token);
+    				},
+    				success : function(data){
+    					if(data.rs == 1){
+    						alert("사용중인 별명입니다.");
+    					}else{
+    						alert("사용가능한 별명입니다.");
+    						nickChk = true;
+    					}
+    				}
+    			});
+    		});
+    		
+    		$('input[name=email]').keyup(function(){
+    			emailChk = false;
+    		});
+    		
+    		$('input[name=email]').focusout(function(){
+    			let email = $(this).val();
+    			if(email.match(regMail)){
+    				emailChk = true;
+    			}
+    		});
+    		
+    		$('input[name=hp]').keyup(function(){
+    			hpChk = false;
+    		});
+    		
+    		$('input[name=hp]').focusout(function(){
+    			let hp = $(this).val();
+    			if(hp.match(regHp)){
+    				hpChk = true;
+    			}
+    		});
+    		
+    		
+    		//전송
+    		$('form').submit(function(){
+    			
+    			if(!uidChk){
+    				alert("아이디를 확인해주세요.");
+    				return false;
+    			}
+    			if(!pass1Chk){
+    				alert("비밀번호를 확인해주세요.");
+    				return false;
+    			}
+    			if(!pass2Chk){
+    				alert("비밀번호 확인을 확인해주세요.");
+    				return false;
+    			}
+    			if(!nameChk){
+    				alert("이름을 확인해주세요.");
+    				return false;
+    			}
+    			if(!nickChk){
+    				alert("별명을 확인해주세요.");
+    				return false;
+    			}
+    			if(!emailChk){
+    				alert("이메일을 확인해주세요.");
+    				return false;
+    			}
+    			if(!hpChk){
+    				alert("휴대폰을 확인해주세요.");
+    				return false;
+    			}
+    			
+    		});
+    		
+    	});
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <h3>Board System v1.0</h3>
+        </header>
+
+        <main id="user" class="register">
+
+            <form th:action="@{/user/register}" method="post">
+                <table border="1">
+                    <caption>사이트 이용정보 입력</caption>
+                    <tr>
+                        <th>아이디</th>
+                        <td>
+                            <input type="text" name="uid" placeholder="아이디 입력"/>
+                            <button type="button" id="checkUid"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
+                            <span class="resultUid"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호</th>
+                        <td>
+                            <input type="password" name="pass1" placeholder="비밀번호 입력"/>
+                            <span class="resultPass"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호 확인</th>
+                        <td>
+                            <input type="password" name="pass2" placeholder="비밀번호 입력 확인"/>
+                            <span class="passOk" style="color:green">비밀번호가 일치합니다.</span>
+                            <span class="passNo" style="color:red">비밀번호가 일치하지 않습니다.</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <table border="1">
+                    <caption>개인정보 입력</caption>
+                    <tr>
+                        <th>이름</th>
+                        <td>
+                            <input type="text" name="name" placeholder="이름 입력"/>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>별명</th>
+                        <td>
+                            <p>공백없이 한글, 영문, 숫자 입력</p>
+                            <input type="text" name="nick" placeholder="별명 입력"/>
+                            <button type="button" id="checkNick"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
+                            <span class="resultNick"></span>
+                        </td>
+                    </tr>                    
+                    <tr>
+                        <th>이메일</th>
+                        <td>
+                            <input type="email" name="email" placeholder="이메일 입력"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>휴대폰</th>
+                        <td>
+                            <input type="text" name="hp" placeholder="- 포함 13자리 입력"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td>
+                            <input type="text" name="zip" id="zip" placeholder="우편번호 검색" readonly/>
+                            <button type="button" onclick="postcode();"><img th:src="@{/img/chk_post.gif}" alt="우편번호 찾기"/></button>
+                            <input type="text" name="addr1" id="addr1" placeholder="기본주소 검색" readonly/>
+                            <input type="text" name="addr2" id="addr2" placeholder="상세주소 입력"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <div>
+                    <a th:href="@{/user/login}" class="btnCancel">취소</a>
+                    <input type="submit" class="btnRegister" value="회원가입"/>
+                </div>
+            </form>            
+        </main>
+
+        <footer>
+            <p>ⓒCopyleft by chhak.or.kr</p>
+        </footer>    
+    </div>
+</body>
+</html>

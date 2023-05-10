@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.board.dao.UserDAO">
+
+	<select id="selectTerms" resultType="TermsVO">
+		SELECT * FROM `board_terms`;
+	</select>
+	
+	<select id="selectUid" resultType="int">
+		SELECT COUNT(*) FROM `board_user` WHERE `uid`=#{uid};
+	</select>
+
+	<select id="selectNick" resultType="int">
+		SELECT COUNT(*) FROM `board_user` WHERE `nick`=#{nick};
+	</select>
+	
+	<insert id="insertUser">
+		INSERT INTO `board_user` SET
+			`uid` = #{uid},
+			`pass` = #{pass1},
+			`name` = #{name},
+			`nick` = #{nick},
+			`email` = #{email},
+			`hp` = #{hp},
+			`zip` = #{zip},
+			`addr1` = #{addr1},
+			`addr2` = #{addr2},
+			`regip` = #{regip},
+			`rdate` = NOW();
+	</insert>
+	
+</mapper>
