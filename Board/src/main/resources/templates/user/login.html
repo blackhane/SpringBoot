@@ -7,8 +7,14 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script th:inline="javascript">
     	var success = [[${success}]];
+    	if(success == 100){
+    		alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+    	}
     	if(success == 101){
     		alert("회원가입이 성공적으로 완료되었습니다.");
+    	}
+    	if(success == 103){
+    		alert("로그아웃이 완료되었습니다.");
     	}
     </script>
 </head>
@@ -18,15 +24,15 @@
             <h3>Board System v1.0</h3>
         </header>
         <main id="user" class="login">
-            <form action="">
+            <form action="#" method="post">
                 <table border="0">
                     <tr>
                         <td><img th:src="@{/img/login_ico_id.png}" alt="로그인"/></td>
-                        <td><input type="text" name="uid" placeholder="아이디 입력"/></td>
+                        <td><input type="text" name="id" placeholder="아이디 입력"/></td>
                     </tr>
                     <tr>
                         <td><img th:src="@{/img/login_ico_pw.png}" alt="비밀번호"/></td>
-                        <td><input type="password" name="pass" placeholder="비밀번호 입력"/></td>
+                        <td><input type="password" name="pw" placeholder="비밀번호 입력"/></td>
                     </tr>
                 </table>
                 <input type="submit" class="btnLogin" value="로그인"/>

@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>글목록</title>    
-    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
     <div id="wrapper">
         <header>
             <h3>Board System v1.0</h3>
             <p>
-                <span class="nick">길동이</span>님 반갑습니다.
-                <a href="./user/login.html" class="logout">[로그아웃]</a>
+                <span class="nick" sec:authentication="principal.user.name"></span>님 반갑습니다.
+                <a href="/user/logout" class="logout">[로그아웃]</a>
             </p>
         </header>
 
         <main id="board" class="list">
             
-            <table border="0">
+            <table border="0" style="table-layout:fixed">
+            	<colgroup>
+            		<col width="10%"></col>
+            		<col width="50%"></col>
+            		<col width="20%"></col>
+            		<col width="10%"></col>
+            		<col width="10%"></col>
+            	</colgroup>
                 <caption>글목록</caption>
                 <tr>
                     <th>번호</th>
@@ -26,14 +34,20 @@
                     <th>날짜</th>
                     <th>조회</th>
                 </tr>
+                <th:block th:if="${#lists.isEmpty(articles)}">
+                	<tr>
+                		<td colspan="5">등록된 게시글이 없습니다.</td>
+                	</tr>
+                </th:block>
+                <th:block th:each="article : ${articles}">
                 <tr>
-                    <td>1</td>
-                    <td><a href="./view.html">테스트 제목입니다.[3]</a></td>
-                    <td>길동이</td>
-                    <td>20-05-12</td>
-                    <td>12</td>
+                    <td>[[${article.no}]]</td>
+                    <td><a th:href="@{/view(no=${article.no})}">[[${article.title}]]&#91;[[${article.comment}]]&#93;</a></td>
+                    <td>[[${article.uid}]]</td>
+                    <td>[[${article.rdate}]]</td>
+                    <td>[[${article.hit}]]</td>
                 </tr>               
-                
+                </th:block>
             </table>
 
             <div class="page">
@@ -44,7 +58,7 @@
                 <a href="#" class="next">다음</a>
             </div>
 
-            <a href="./write.html" class="btnWrite">글쓰기</a>
+            <a th:href="@{/write}" class="btnWrite">글쓰기</a>
 
         </main>
 

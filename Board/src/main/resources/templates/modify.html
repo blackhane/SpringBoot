@@ -1,41 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>글수정</title>    
-    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
     <div id="wrapper">
         <header>
             <h3>Board System v1.0</h3>
             <p>
-                <span class="nick">길동이</span>님 반갑습니다.
-                <a href="#" class="logout">[로그아웃]</a>
+                <span class="nick" sec:authentication="principal.user.name"></span>님 반갑습니다.
+                <a href="/user/logout" class="logout">[로그아웃]</a>
             </p>
         </header>
 
         <main id="board" class="modify">
             
-            <form action="#">
+            <form th:action="@{/modify}" method="post">
+            	<input type="hidden" name="no" th:value="${vo.no}"> 
                 <table border="0">
                     <caption>글수정</caption>
                     <tr>
                         <th>제목</th>
-                        <td><input type="text" name="title" placeholder="제목을 입력하세요."/></td>
+                        <td><input type="text" name="title" th:value="${vo.title}" placeholder="제목을 입력하세요."/></td>
                     </tr>
                     <tr>
                         <th>내용</th>
-                        <td><textarea name="content"></textarea></td>
+                        <td><textarea name="content">[[${vo.content}]]</textarea></td>
                     </tr>
                     <tr>
                         <th>파일</th>
-                        <td><input type="file" name="file"/></td>
+                        <td><input type="file" name="fname"/></td>
                     </tr>
                 </table>
 
                 <div>
-                    <a href="./view.html" class="btn btnCancel">취소</a>
+                    <a th:href="@{/view(no=${vo.no})}" class="btn btnCancel">취소</a>
                     <input type="submit" value="수정완료" class="btn btnComplete"/>
                 </div>
             </form>

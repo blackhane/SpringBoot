@@ -20,7 +20,7 @@
 	<insert id="insertUser">
 		INSERT INTO `board_user` SET
 			`uid` = #{uid},
-			`pass` = #{pass1},
+			`pass` = #{pass},
 			`name` = #{name},
 			`nick` = #{nick},
 			`email` = #{email},

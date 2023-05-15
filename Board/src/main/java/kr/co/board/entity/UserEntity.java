@@ -1,10 +1,19 @@
-package kr.co.board.vo;
+package kr.co.board.entity;
 
-import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Data
-public class UserVO {
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Entity
+@Table(name = "board_user")
+public class UserEntity {
+
+	@Id
 	private String uid;
 	private String pass;
 	private String pass1;
