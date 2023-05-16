@@ -39,7 +39,7 @@
 
         <main id="board" class="write">
             
-            <form th:action="@{/write}" method="post">
+            <form th:action="@{/write}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="uid" th:value="${#authentication.principal.user.uid}">
                 <table border="0">
                     <caption>글쓰기</caption>

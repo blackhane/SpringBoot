@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import kr.co.board.vo.ArticleVO;
+import kr.co.board.vo.FileVO;
 
 @Mapper
 @Repository
@@ -14,7 +15,10 @@ public interface ArticleDAO {
 	public ArticleVO selectArticle(int no);
 	public List<ArticleVO> selectArticles();
 	public void insertArticle(ArticleVO vo);
+	public void insertFile(FileVO vo);
 	public void updateArticle(ArticleVO vo);
 	public void deleteArticle(int no);
 
+	
+	public FileVO selectFile(int fno);
 }

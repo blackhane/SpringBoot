@@ -1,10 +1,13 @@
 package kr.co.board.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import kr.co.board.service.ArticleService;
 import kr.co.board.vo.ArticleVO;
+import kr.co.board.vo.FileVO;
 
 @Controller
 public class MainController {
@@ -48,7 +52,17 @@ public class MainController {
 		ArticleVO vo = service.selectArticle(no);
 		model.addAttribute("vo",vo);
 		
+		System.out.println(vo.getFileVo().getOriName());
+		
 		return "view";
+	}
+	
+	@GetMapping("download")
+	public ResponseEntity<Resource> download(int fno) throws IOException {
+		FileVO vo = service.selectFile(fno);
+		
+		ResponseEntity<Resource> respEntity = service.download(vo);
+		return respEntity;
 	}
 	
 	@GetMapping("modify")
@@ -69,9 +83,9 @@ public class MainController {
 	}
 	
 	@GetMapping("delete")
-	public String delete(int no) {
+	public String delete(int no, String newName) {
 		
-		service.deleteArticle(no);
+		service.deleteArticle(no, newName);
 		
 		return "redirect:/list";
 	}

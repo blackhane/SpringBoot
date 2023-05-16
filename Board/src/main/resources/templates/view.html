@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                     <th>파일</th>
-                    <td><a href="#">2020년 상반기 매출자료.xls</a><span>7</span>회 다운로드</td>
+                    <td><a th:href="@{/download(fno=${vo.fileVo.fno})}">[[${vo.fileVo.oriName}]]</a></td>
                 </tr>
                 <tr>
                     <th>내용</th>
@@ -35,7 +35,7 @@
             </table>
 
             <div>
-                <a th:href="@{/delete(no=${vo.no})}" class="btn btnRemove">삭제</a>
+                <a th:href="@{/delete(no=${vo.no}, newName=${vo.fileVo.newName})}" class="btn btnRemove">삭제</a>
                 <a th:href="@{/modify(no=${vo.no})}" class="btn btnModify">수정</a>
                 <a th:href="@{/list}" class="btn btnList">목록</a>
             </div>

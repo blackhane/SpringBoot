@@ -5,13 +5,35 @@
 <!-- namespace = mapper파일의 아이디 값 -->
 <mapper namespace="kr.co.board.dao.ArticleDAO">
 
-	<select id="selectArticle" resultType="kr.co.board.vo.ArticleVO">
-		SELECT * FROM `board_article` WHERE `no`=#{no};
+	<resultMap type="kr.co.board.vo.ArticleVO" id="selectArticleResultMap">
+		<id column="no" property="no"/>
+		<result column="comment" property="comment"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="file" property="file"/>
+		<result column="uid" property="uid"/>
+		<result column="regip" property="regip"/>
+		<result column="rdate" property="rdate"/>
+		<association property="fileVo" javaType="kr.co.board.vo.FileVO">
+			<id column="fno" property="fno"/>
+			<result column="parent" property="parent"/>
+			<result column="newName" property="newName"/>
+			<result column="oriName" property="oriName"/>
+			<result column="download" property="download"/>
+		</association>
+	</resultMap>
+	<select id="selectArticle" resultMap="selectArticleResultMap">
+		SELECT * FROM `board_article` AS a
+		LEFT JOIN `board_file` AS b
+		ON a.`no` = b.`parent` WHERE `no`=#{no};
+	</select>
+	<select id="selectFile" resultType="kr.co.board.vo.FileVO">
+		SELECT * FROM `board_file` WHERE `fno`=#{fno};
 	</select>
 	<select id="selectArticles" resultType="kr.co.board.vo.ArticleVO">
-		SELECT * FROM `board_article`;
+		SELECT * FROM `board_article` ORDER BY `no` DESC;
 	</select>
-	<insert id="insertArticle">
+	<insert id="insertArticle" useGeneratedKeys="true" keyProperty="no">
 		INSERT INTO `board_article` SET
 			`title` = #{title},
 			`content` = #{content},
@@ -20,6 +42,13 @@
 			`regip` = #{regip},
 			`rdate` = NOW(),
 			`updatedDate` = NOW();
+	</insert>
+	<insert id="insertFile">
+		INSERT INTO `board_file` SET
+			`parent` = #{parent},
+			`newName` = #{newName},
+			`oriName` = #{oriName},
+			`rdate` = NOW();
 	</insert>
 	<update id="updateArticle">
 		UPDATE `board_article` SET
