@@ -52,8 +52,6 @@ public class MainController {
 		ArticleVO vo = service.selectArticle(no);
 		model.addAttribute("vo",vo);
 		
-		System.out.println(vo.getFileVo().getOriName());
-		
 		return "view";
 	}
 	

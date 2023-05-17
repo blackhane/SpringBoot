@@ -23,7 +23,12 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
-	@GetMapping(value = {"user/login", "/"})
+	@GetMapping("/")
+	public String root() {
+		return "redirect:/user/login";
+	}
+	
+	@GetMapping("user/login")
 	public String login(@RequestParam(required = false) String success, Model model) {
 		
 		model.addAttribute("success", success);

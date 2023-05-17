@@ -5,8 +5,6 @@
     <title>회원가입</title>    
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-	<meta name="_csrf" th:content="${_csrf.token}">
-	<meta name="_csrf_header" th:content="${_csrf.headerName}">
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
 	    function postcode() {
@@ -65,11 +63,6 @@
     				method : 'post',
     				data : {'uid' : uid},
     				dataType : 'json',
-    				beforeSend: function (jqXHR, settings) {
-    			           var header = $("meta[name='_csrf_header']").attr("content");
-    			           var token = $("meta[name='_csrf']").attr("content");
-    			           jqXHR.setRequestHeader(header, token);
-    				},
     				success : function(data){
     					if(data.rs == 1){
     						alert("사용중인 아이디입니다.");
@@ -138,11 +131,6 @@
     				method : 'post',
     				data : {'nick' : nick},
     				dataType : 'json',
-    				beforeSend: function (jqXHR, settings) {
-    			           var header = $("meta[name='_csrf_header']").attr("content");
-    			           var token = $("meta[name='_csrf']").attr("content");
-    			           jqXHR.setRequestHeader(header, token);
-    				},
     				success : function(data){
     					if(data.rs == 1){
     						alert("사용중인 별명입니다.");
