@@ -24,6 +24,14 @@
     			
     			return true;
     		});
+    		
+    		$('input[name=fname]').change(function(){
+    			$("#deleteFile").css("display","inline-block");
+    		});
+    		$('#deleteFile').click(function(){
+				$('input[name=fname]').val("");
+    			$("#deleteFile").css("display","none");
+    		});
     	});
     </script>
 </head>
@@ -53,7 +61,7 @@
                     </tr>
                     <tr>
                         <th>파일</th>
-                        <td><input type="file" name="fname"/></td>
+                        <td><input type="file" name="fname"/><span id="deleteFile"><a href="#">삭제</a></span></td>
                     </tr>
                 </table>
 

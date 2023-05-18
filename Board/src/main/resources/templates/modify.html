@@ -5,6 +5,18 @@
     <meta charset="UTF-8">
     <title>글수정</title>    
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		$('input[name=fname]').change(function(){
+    			$("#deleteFile").css("display","inline-block");
+    		});
+    		$('#deleteFile').click(function(){
+				$('input[name=fname]').val("");
+    			$("#deleteFile").css("display","none");
+    		});
+    	});
+    </script>
 </head>
 <body>
     <div id="wrapper">
@@ -18,7 +30,7 @@
 
         <main id="board" class="modify">
             
-            <form th:action="@{/modify}" method="post">
+            <form th:action="@{/modify}" method="post" enctype="multipart/form-data">
             	<input type="hidden" name="no" th:value="${vo.no}"> 
                 <table border="0">
                     <caption>글수정</caption>
@@ -30,10 +42,11 @@
                         <th>내용</th>
                         <td><textarea name="content">[[${vo.content}]]</textarea></td>
                     </tr>
-                    <tr>
+                    <tr th:if="${vo.file == 0}">
                         <th>파일</th>
-                        <td><input type="file" name="fname"/></td>
+                        <td><input type="file" name="fname"/><span id="deleteFile"><a href="#">삭제</a></span></td>
                     </tr>
+                    <input type="hidden" name="file" th:value="${vo.file}"/>
                 </table>
 
                 <div>

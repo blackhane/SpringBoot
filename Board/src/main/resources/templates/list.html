@@ -52,9 +52,9 @@
 
             <div class="page">
                 <a href="#" class="prev">이전</a>
-                <a href="#" class="num current">1</a>
-                <a href="#" class="num">2</a>
-                <a href="#" class="num">3</a>
+                <th:block th:each="num : ${#numbers.sequence(pageGroup.pageGroupStart,pageGroup.pageGroupEnd)}">
+                	<a th:href="@{/list(pg=${num})}" class="num current">[[${num}]]</a>
+                </th:block>
                 <a href="#" class="next">다음</a>
             </div>
 

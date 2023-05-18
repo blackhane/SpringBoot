@@ -552,3 +552,13 @@ footer > p {
 
 .passOk {display:none;}
 .passNo {display:none;}
+
+#board.write table input[name=fname] {
+	width: 95%;
+}
+#board.modify table input[name=fname] {
+	width: 95%;
+}
+#deleteFile {
+	display: none;
+}

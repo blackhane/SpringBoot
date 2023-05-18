@@ -12,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.board.service.ArticleService;
 import kr.co.board.vo.ArticleVO;
 import kr.co.board.vo.FileVO;
+import kr.co.board.vo.PageGroup;
 
 @Controller
 public class MainController {
@@ -24,10 +26,17 @@ public class MainController {
 	private ArticleService service;
 	
 	@GetMapping("list")
-	public String list(Model model) {
+	public String list(Model model,@RequestParam(required = false) Integer pg) {
 		
-		List<ArticleVO> articles = service.selectArticles();
+		if(pg == null) {
+			pg = 1;
+		}
+		
+		List<ArticleVO> articles = service.selectArticles(pg);
 		model.addAttribute("articles", articles);
+		
+		PageGroup pageGroup = service.selectCountArticles(pg);
+		model.addAttribute("pageGroup", pageGroup);
 		
 		return "list";
 	}

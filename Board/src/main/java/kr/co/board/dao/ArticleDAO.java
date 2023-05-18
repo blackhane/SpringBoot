@@ -13,7 +13,9 @@ import kr.co.board.vo.FileVO;
 public interface ArticleDAO {
 
 	public ArticleVO selectArticle(int no);
-	public List<ArticleVO> selectArticles();
+	public void updateArticleHit(int no);
+	public List<ArticleVO> selectArticles(int pg);
+	public int selectCountArticles();
 	public void insertArticle(ArticleVO vo);
 	public void insertFile(FileVO vo);
 	public void updateArticle(ArticleVO vo);

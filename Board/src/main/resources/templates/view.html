@@ -24,7 +24,7 @@
                     <th>제목</th>
                     <td><input type="text" name="title" readonly th:value="${vo.title}"/></td>
                 </tr>
-                <tr>
+                <tr th:if="${vo.file == 1}">
                     <th>파일</th>
                     <td><a th:href="@{/download(fno=${vo.fileVo.fno})}">[[${vo.fileVo.oriName}]]</a></td>
                 </tr>

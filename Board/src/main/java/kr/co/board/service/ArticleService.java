@@ -15,6 +15,7 @@ import kr.co.board.config.FileConfig;
 import kr.co.board.dao.ArticleDAO;
 import kr.co.board.vo.ArticleVO;
 import kr.co.board.vo.FileVO;
+import kr.co.board.vo.PageGroup;
 
 @Service
 public class ArticleService {
@@ -26,11 +27,40 @@ public class ArticleService {
 	private FileConfig fileConfig;
 	
 	public ArticleVO selectArticle(int no) {
+		dao.updateArticleHit(no);
 		return dao.selectArticle(no);
 	}
 	
-	public List<ArticleVO> selectArticles(){
-		return dao.selectArticles();
+	public List<ArticleVO> selectArticles(int pg){
+		pg = (pg-1) * 10; 
+		return dao.selectArticles(pg);
+	}
+	public PageGroup selectCountArticles(int pg) {
+		int count = dao.selectCountArticles();
+		int pageGroupStart = 0;
+		int pageGroupEnd = 0;
+		int lastPageNum = 0;
+		int currentPageGroup = 0;
+		
+		if(count % 10 == 0) {
+			lastPageNum = count / 10;
+		}else {
+			lastPageNum = count / 10 + 1;
+		}
+		
+		currentPageGroup = (int)Math.ceil(pg / 10.0);
+		pageGroupStart = (pg - 1) * 10 + 1;
+		pageGroupEnd = currentPageGroup * 10;
+		
+		if(pageGroupEnd > lastPageNum) {
+			pageGroupEnd = lastPageNum;
+		}
+
+		PageGroup pageGroup = new PageGroup();
+		pageGroup.setPageGroupStart(pageGroupStart);
+		pageGroup.setPageGroupEnd(pageGroupEnd);
+		
+		return pageGroup;
 	}
 	
 	@Transactional
@@ -57,9 +87,27 @@ public class ArticleService {
 	public ResponseEntity<Resource> download(FileVO vo) throws IOException {
 		return fileConfig.fileDownload(vo);
 	}
-	
+
+	@Transactional
 	public void updateArticle(ArticleVO vo) {
-		dao.updateArticle(vo);
+		MultipartFile file = vo.getFname();
+		if(file == null || file.isEmpty()) {
+			if(vo.getFile() == 1) {
+				return;
+			}else {
+				vo.setFile(0);
+			}
+			dao.updateArticle(vo);
+		}else {
+			vo.setFile(1);
+			dao.updateArticle(vo);
+			
+			FileVO fvo = new FileVO();
+			fvo.setParent(vo.getNo());
+			fvo = fileConfig.fileUpload(file, fvo);
+			dao.insertFile(fvo);
+		}
+		
 	}
 	
 	public void deleteArticle(int no, String newName) {

@@ -27,11 +27,17 @@
 		LEFT JOIN `board_file` AS b
 		ON a.`no` = b.`parent` WHERE `no`=#{no};
 	</select>
+	<update id="updateArticleHit">
+		UPDATE `board_article` SET `hit`=`hit`+1 WHERE `no`=#{no};
+	</update>
 	<select id="selectFile" resultType="kr.co.board.vo.FileVO">
 		SELECT * FROM `board_file` WHERE `fno`=#{fno};
 	</select>
 	<select id="selectArticles" resultType="kr.co.board.vo.ArticleVO">
-		SELECT * FROM `board_article` ORDER BY `no` DESC;
+		SELECT * FROM `board_article` ORDER BY `no` DESC LIMIT #{pg},10;
+	</select>
+	<select id="selectCountArticles" resultType="int">
+		SELECT COUNT(*) FROM `board_article`;
 	</select>
 	<insert id="insertArticle" useGeneratedKeys="true" keyProperty="no">
 		INSERT INTO `board_article` SET
