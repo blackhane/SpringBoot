@@ -41,7 +41,7 @@
                 </th:block>
                 <th:block th:each="article : ${articles}">
                 <tr>
-                    <td>[[${article.no}]]</td>
+                    <td>[[${pageGroup.count - articleStat.index}]]</td>
                     <td><a th:href="@{/view(no=${article.no})}">[[${article.title}]]&#91;[[${article.comment}]]&#93;</a></td>
                     <td>[[${article.uid}]]</td>
                     <td>[[${article.rdate}]]</td>
@@ -51,11 +51,15 @@
             </table>
 
             <div class="page">
-                <a href="#" class="prev">이전</a>
+            	<th:block th:if="${pageGroup.pageGroupStart > 1}">
+            		<a th:href="@{/list(pg=${pageGroup.pageGroupStart - 1})}" class="prev">이전</a>
+            	</th:block>
                 <th:block th:each="num : ${#numbers.sequence(pageGroup.pageGroupStart,pageGroup.pageGroupEnd)}">
-                	<a th:href="@{/list(pg=${num})}" class="num current">[[${num}]]</a>
+                	<a th:href="@{/list(pg=${num})}" class="num" th:class="${pageGroup.pg} == ${num} ? 'current' : 'off'">[[${num}]]</a>
                 </th:block>
-                <a href="#" class="next">다음</a>
+				<th:block th:if="${pageGroup.pageGroupEnd < pageGroup.lastPageNum}">
+                	<a th:href="@{/list(pg=${pageGroup.pageGroupEnd + 1})}" class="next">다음</a>
+                </th:block>
             </div>
 
             <a th:href="@{/write}" class="btnWrite">글쓰기</a>

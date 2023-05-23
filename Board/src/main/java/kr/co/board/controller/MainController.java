@@ -36,6 +36,7 @@ public class MainController {
 		model.addAttribute("articles", articles);
 		
 		PageGroup pageGroup = service.selectCountArticles(pg);
+		pageGroup.setPg(pg);
 		model.addAttribute("pageGroup", pageGroup);
 		
 		return "list";

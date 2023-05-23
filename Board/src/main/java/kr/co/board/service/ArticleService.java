@@ -49,7 +49,7 @@ public class ArticleService {
 		}
 		
 		currentPageGroup = (int)Math.ceil(pg / 10.0);
-		pageGroupStart = (pg - 1) * 10 + 1;
+		pageGroupStart = (currentPageGroup - 1) * 10 + 1;
 		pageGroupEnd = currentPageGroup * 10;
 		
 		if(pageGroupEnd > lastPageNum) {
@@ -59,6 +59,8 @@ public class ArticleService {
 		PageGroup pageGroup = new PageGroup();
 		pageGroup.setPageGroupStart(pageGroupStart);
 		pageGroup.setPageGroupEnd(pageGroupEnd);
+		pageGroup.setLastPageNum(lastPageNum);
+		pageGroup.setCount(count - ((pg-1) * 10));
 		
 		return pageGroup;
 	}

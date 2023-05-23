@@ -8,6 +8,25 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript">
     	$(function(){
+    		//빈칸 체크
+    		$('form').submit(function(){
+    			let title = $('input[name=title]').val();
+    			let content = $('input[name=content]').val();
+    			
+    			if(title.trim() == ""){
+    				alert("제목을 입력하세요.");
+    				return false;
+    			}
+    			
+    			if(content.trim() == ""){
+    				alert("내용을 입력하세요.");
+    				return false;
+    			}
+    			
+    			return true;
+    		});
+    		
+    		//파일 삭제버튼 (초기화)
     		$('input[name=fname]').change(function(){
     			$("#deleteFile").css("display","inline-block");
     		});

@@ -60,7 +60,7 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@PostMapping("checkUid")
+	@GetMapping("checkUid")
 	public Map<String, Integer> checkUid(String uid) {
 
 		int rs = service.selectUid(uid);
@@ -72,7 +72,7 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@PostMapping("checkNick")
+	@GetMapping("checkNick")
 	public Map<String, Integer> checkNick(String nick) {
 		
 		int rs = service.selectNick(nick);

@@ -5,6 +5,137 @@
     <meta charset="UTF-8">
     <title>글보기</title>    
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script th:inline="javascript">
+    	$(function(){
+    		//댓글불러오기
+    		let no = [[${vo.no}]];
+    		
+    		list();
+    		function list(){
+    			$.ajax({
+        			url : '/review',
+        			method : 'GET',
+        			data : {'no' : no},
+        			dataType : 'JSON',
+        			success : function(data){
+        				$('.empty').remove();
+        				$('.list').remove();
+        				
+        				if(data.reviews.length == 0){
+        	                let tag = "<p class='empty'>등록된 댓글이 없습니다.</p>";
+                			$('.commentList').append(tag);
+        				}else{
+        					for(let list of data.reviews){
+        						let tag = "<article class='list'>";
+		                            tag += "<span class='nick'>"+list.nick+"</span>&nbsp;";
+		                            tag += "<span class='date'>"+list.rdate+"</span>";                
+		                            tag += "<textarea name='content' class='review' readonly='true'>"+list.content+"</textarea>";
+		                            tag += "<div>";
+		                            tag +=     "<a href='#' class='remove' data-no="+list.no+" data-parent="+list.parent+">삭제</a>&nbsp;";
+		                            tag +=     "<a href='#' class='modify' data-no="+list.no+">수정</a>";
+		                            tag += "</div>";
+		                            tag += "</article>";
+	            				$('.commentList').append(tag);
+        					}
+        					
+        				}
+        				
+        			}
+        		});
+    		}
+    		
+    		//댓글작성
+    		$('.btnComplete').click(function(e){
+    			e.preventDefault();
+    			
+    			let comment = $('.comment').val();
+    			if(comment.trim() == ''){
+    				alert('댓글을 작성해주세요.');
+    				return false;
+    			}
+    			let nick = $('input[name=nick]').val();
+    			let uid = $('input[name=uid]').val();
+    			write(comment, nick, uid);
+    		});
+    		
+    		function write(comment, nick, uid){
+    			let jsonData = {
+    				'parent' : no,
+    				'content' : comment,
+    				'nick' : nick,
+    				'uid' : uid,
+    			}
+    			$.ajax({
+        			url : '/review',
+        			method : 'POST',
+        			data : jsonData,
+        			dataType : 'JSON',
+        			success : function(data){
+        				$('.comment').val('');
+        				list();
+        			}
+        		});
+    		}
+    		
+    		//댓글수정
+    		$(document).on('click','.modify',function(){
+    			if($(this).text() == '수정'){
+    				$(this).parent().prev().attr('readonly', false).focus();
+        			$(this).text('수정완료');
+    			}else{
+    				let no = $(this).data('no');
+    				let content = $(this).parent().prev().val();
+    				
+    				let jsonData = {
+    					'no' : no,
+    					'content' : content,
+    				}
+
+    				$.ajax({
+    					url : '/review',
+            			method : 'PUT',
+            			data : jsonData,
+            			dataType : 'JSON',
+            			success : function(data){
+            				list();
+            				$(this).parent().prev().attr('readonly', true);
+            			}
+    				});
+    				$(this).text('수정');
+    			}
+    		});
+    		
+    		//댓글삭제
+    		$(document).on('click','.remove',function(){
+    			
+    			let answer = confirm("댓글을 삭제하시겠습니까?");
+    			if(!answer){
+    				return false;
+    			}
+    			
+    			let no = $(this).data('no');
+    			let parent = $(this).data('parent');
+    			
+    			let jsonData = {
+    				'no' : no,
+    				'parent' : parent,
+    			}
+    			
+    			console.log(jsonData);
+    			$.ajax({
+        			url : '/review',
+        			method : 'DELETE',
+        			data : jsonData,
+        			dataType : 'JSON',
+        			success : function(data){
+        				list();
+        			}
+        		});
+    			
+    		});
+    	});
+    </script>
 </head>
 <body>
     <div id="wrapper">
@@ -43,6 +174,7 @@
             <!-- 댓글목록 -->
             <section class="commentList">
                 <h3>댓글목록</h3>
+                <!-- 
                 <article>
                     <span class="nick">길동이</span>
                     <span class="date">20-05-13</span>                    
@@ -51,15 +183,18 @@
                         <a href="#" class="remove">삭제</a>
                         <a href="#" class="modify">수정</a>
                     </div>
-                </article>                
+                </article>    
                 <p class="empty">등록된 댓글이 없습니다.</p>
+                 -->              
             </section>
 
             <!-- 댓글쓰기 -->
             <section class="commentForm">
                 <h3>댓글쓰기</h3>
                 <form action="#">
-                    <textarea name="content" placeholder="댓글내용 입력"></textarea>
+                	<input type="hidden" name="uid" th:value="${#authentication.principal.user.uid}"/>
+                	<input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}"/>
+                    <textarea name="content" class="comment" placeholder="댓글내용 입력"></textarea>
                     <div>
                         <a href="#" class="btn btnCancel">취소</a>
                         <input type="submit" class="btn btnComplete" value="작성완료"/>

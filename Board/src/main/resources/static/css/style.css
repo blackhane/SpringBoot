@@ -562,3 +562,11 @@ footer > p {
 #deleteFile {
 	display: none;
 }
+.review {
+	width: 100%;
+    height: 60px;
+    border: 1px solid #e4eaec;
+    resize: none;
+    padding: 6px;
+    box-sizing: border-box;
+}

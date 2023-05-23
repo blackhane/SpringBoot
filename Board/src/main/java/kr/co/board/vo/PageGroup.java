@@ -9,5 +9,8 @@ public class PageGroup {
 
 	private int pageGroupStart;
 	private int pageGroupEnd;
+	private int lastPageNum;
+	private int count;
+	private int pg;
 	
 }

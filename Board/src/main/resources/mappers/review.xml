@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace = mapper파일의 아이디 값 -->
+<mapper namespace="kr.co.board.dao.ReviewDAO">
+
+	<select id="selectReviews" resultType="kr.co.board.vo.ArticleVO">
+		SELECT * FROM `board_article` WHERE `parent`=#{no} ORDER BY `no` DESC;
+	</select>
+	
+	<insert id="insertReview">
+		INSERT INTO `board_article` SET
+			`parent`=#{parent},
+			`content`=#{content},
+			`nick`=#{nick},
+			`uid`=#{uid},
+			`regip`=#{regip},
+			`rdate`=NOW(),
+			`updatedDate`=NOW();
+	</insert>
+	<update id="updateCommentUp">
+		UPDATE `board_article` SET `comment` = `comment`+1 WHERE `no`=#{parent};
+	</update>
+	
+	<update id="modifyReview">
+		UPDATE `board_article` SET
+			`content`=#{content},
+			`updatedDate`=NOW() 
+			WHERE `no`=#{no};
+	</update>
+	
+	<delete id="deleteReview">
+		DELETE FROM `board_article` WHERE `no`=#{no};
+	</delete>
+	<update id="updateCommentDown">
+		UPDATE `board_article` SET `comment` = `comment`-1 WHERE `no`=#{no};
+	</update>
+	
+</mapper>
